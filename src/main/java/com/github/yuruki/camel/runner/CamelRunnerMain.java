@@ -2,6 +2,8 @@ package com.github.yuruki.camel.runner;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.component.properties.PropertiesComponent;
+import org.apache.camel.impl.DefaultCamelContext;
+import org.apache.camel.impl.DefaultCamelContextNameStrategy;
 import org.apache.camel.main.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +46,12 @@ public class CamelRunnerMain extends Main {
         });
     }
 
+    public static void main(String... args) throws Exception {
+        Main main = new CamelRunnerMain();
+        main.enableHangupSupport();
+        main.run(args);
+    }
+
     @Override
     public void showOptionsHeader() {
         System.out.println("A standalone Camel runner for command line");
@@ -54,23 +62,32 @@ public class CamelRunnerMain extends Main {
 
     @Override
     protected CamelContext createContext() {
-        CamelContext answer = super.createContext();
+        CamelContext camelContext = new DefaultCamelContext();
 
         // Set up properties
-        answer = setupPropertiesComponent(answer);
+        setupPropertiesComponent(camelContext);
+
+        // Set up context
+        try {
+            camelContext.setNameStrategy(new DefaultCamelContextNameStrategy(camelContext.resolvePropertyPlaceholders("{{camelContextId}}")));
+            camelContext.setUseMDCLogging(true);
+            camelContext.setUseBreadcrumb(true);
+        } catch (Exception e) {
+            log.warn("Couldn't set Camel context name", e);
+        }
 
         // Set up default routes through properties component
         if (null == getRouteBuilderClasses()) {
             try {
-                setRouteBuilderClasses(answer.resolvePropertyPlaceholders("{{defaultRouteBuilderClasses}}"));
+                setRouteBuilderClasses(camelContext.resolvePropertyPlaceholders("{{defaultRouteBuilderClasses}}"));
             } catch (Exception e) {
                 log.warn("Couldn't set default routes", e);
             }
         }
-        return answer;
+        return camelContext;
     }
 
-    private CamelContext setupPropertiesComponent(CamelContext camelContext) {
+    private void setupPropertiesComponent(CamelContext camelContext) {
         PropertiesComponent pc = new PropertiesComponent();
         if (camelContext.getComponentNames().contains("properties")) {
             pc = camelContext.getComponent("properties", PropertiesComponent.class);
@@ -93,7 +110,5 @@ public class CamelRunnerMain extends Main {
         }
         pc.setLocations(locations.toArray(new String[locations.size()]));
         pc.setOverrideProperties(properties);
-
-        return camelContext;
     }
 }

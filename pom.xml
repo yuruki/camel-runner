@@ -82,7 +82,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.github.yuruki.camel.runner.MainApp</mainClass>
+                            <mainClass>com.github.yuruki.camel.runner.CamelRunnerMain</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -124,7 +124,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.2.1</version>
                 <configuration>
-                    <mainClass>com.github.yuruki.camel.runner.MainApp</mainClass>
+                    <mainClass>com.github.yuruki.camel.runner.CamelRunnerMain</mainClass>
                     <includePluginDependencies>false</includePluginDependencies>
                 </configuration>
             </plugin>

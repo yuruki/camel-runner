@@ -6,11 +6,12 @@ import org.apache.commons.lang.Validate;
 
 public class SimpleRouteBuilder extends RouteBuilder {
 
+    // Configurable fields
+    private String camelRouteId = "simple-route";
     private Integer maximumRedeliveries;
     private Long redeliveryDelay;
     private Double backOffMultiplier;
     private Long maximumRedeliveryDelay;
-    private String camelRouteId = "simple-route";
 
     @Override
     public void configure() throws Exception {

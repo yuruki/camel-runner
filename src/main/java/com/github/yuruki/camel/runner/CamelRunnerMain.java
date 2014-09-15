@@ -41,6 +41,7 @@ public class CamelRunnerMain extends Main {
             }
         });
         addOption(new ParameterOption("pf", "propertiesFile", "Loads a properties file to Camel properties component", "propertyFile") {
+            @Override
             protected void doProcess(String arg, String parameter, LinkedList<String> remainingArgs) {
                 log.info("Setting properties file: " + parameter);
                 propertiesFile = new File(parameter);

@@ -25,16 +25,17 @@ public class CamelRunnerMain extends Main {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private String propertyPrefix = "";
-    private String camelContextId;
-
     private File propertiesFile;
     private Properties properties = new Properties();
+
+    // Configurable fields
+    private String camelContextId;
 
     public CamelRunnerMain() {
         addOption(new ParameterOption("p", "property", "Adds a property value to Camel properties component", "propertyValue") {
             @Override
             protected void doProcess(String arg, String parameter, LinkedList<String> remainingArgs) {
-                String[] p = parameter.split("=");
+                String[] p = parameter.split("=", 2);
                 log.info(String.format("Added property %s = %s", p[0], p[1]));
                 properties.put(p[0], p[1]);
             }

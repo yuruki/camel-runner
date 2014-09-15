@@ -46,44 +46,4 @@ public class SimpleRouteBuilder extends RouteBuilder {
         Validate.notNull(maximumRedeliveryDelay, "maximumRedeliveryDelay property is not set");
         Validate.notNull(camelRouteId, "camelRouteId property is not set");
     }
-
-    public Integer getMaximumRedeliveries() {
-        return maximumRedeliveries;
-    }
-
-    public void setMaximumRedeliveries(Integer maximumRedeliveries) {
-        this.maximumRedeliveries = maximumRedeliveries;
-    }
-
-    public Long getRedeliveryDelay() {
-        return redeliveryDelay;
-    }
-
-    public void setRedeliveryDelay(Long redeliveryDelay) {
-        this.redeliveryDelay = redeliveryDelay;
-    }
-
-    public Double getBackOffMultiplier() {
-        return backOffMultiplier;
-    }
-
-    public void setBackOffMultiplier(Double backOffMultiplier) {
-        this.backOffMultiplier = backOffMultiplier;
-    }
-
-    public Long getMaximumRedeliveryDelay() {
-        return maximumRedeliveryDelay;
-    }
-
-    public void setMaximumRedeliveryDelay(Long maximumRedeliveryDelay) {
-        this.maximumRedeliveryDelay = maximumRedeliveryDelay;
-    }
-
-    public String getCamelRouteId() {
-        return camelRouteId;
-    }
-
-    public void setCamelRouteId(String camelRouteId) {
-        this.camelRouteId = camelRouteId;
-    }
 }

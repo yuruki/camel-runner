@@ -40,7 +40,7 @@ public class CamelRunnerMain extends Main {
                 properties.put(p[0], p[1]);
             }
         });
-        addOption(new ParameterOption("pf", "propertiesFile", "Loads a properties file to Camel properties component", "propertyFile") {
+        addOption(new ParameterOption("pf", "propertiesFile", "Loads a properties file to Camel properties component", "propertiesFile") {
             @Override
             protected void doProcess(String arg, String parameter, LinkedList<String> remainingArgs) {
                 log.info("Setting properties file: " + parameter);
@@ -67,6 +67,7 @@ public class CamelRunnerMain extends Main {
         System.out.println("A standalone Camel runner for command line");
         System.out.println();
         System.out.println("java -jar camel-runner-<version>.jar [options]");
+        System.out.println("java -cp \"./*;lib/*\" com.github.yuruki.camel.runner.CamelRunnerMain [options]");
         System.out.println();
     }
 

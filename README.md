@@ -1,7 +1,12 @@
 camel-runner
 ============
 
-A standalone Camel runner for command line
+A standalone Camel runner for command line.
+
+The runner includes a default route which implements a simple from -> to integration pattern with success/failure logging and redelivery.
+Everything is configured via properties.
+
+Properties can be loaded from a file and with command line parameters.
 
 Example 1, show usage:
 
@@ -9,6 +14,7 @@ Example 1, show usage:
     A standalone Camel runner for command line
     
     java -jar camel-runner-<version>.jar [options]
+    java -cp "./*;lib/*" com.github.yuruki.camel.runner.CamelRunnerMain [options]
     
       -h or -help = Displays the help screen
       -r or -routers <routerBuilderClasses> = Sets the router builder classes which will be loaded while starting the camel context
@@ -18,12 +24,12 @@ Example 1, show usage:
       -t or -trace = Enables tracing
       -out or -output <filename> = Output all routes to the specified XML file
       -p or -property <propertyValue> = Adds a property value to Camel properties component
-      -pf or -propertiesFile <propertyFile> = Loads a properties file to Camel properties component
+      -pf or -propertiesFile <propertiesFile> = Loads a properties file to Camel properties component
       -pp or -propertyPrefix <propertyPrefix> = Sets a property prefix for Camel properties component
 
 Example 2, listen to ActiveMQ topic and log the messages:
 
-    # java -jar target\camel-runner-1.1-SNAPSHOT.jar -p "from=amqpool:topic:camel-runner.test.in?username=admin&password=xxxxxx" -p poolBrokerUrl=tcp://localhost:61616
+    # java -jar camel-runner-1.1-SNAPSHOT.jar -p "from=amqpool:topic:camel-runner.test.in?username=admin&password=xxxxxx" -p poolBrokerUrl=tcp://localhost:61616
     [                          main] CamelRunnerMain                INFO  Added property from = amqpool:topic:camel-runner.test.in?username=admin&password=xxxxxx
     [                          main] CamelRunnerMain                INFO  Added property poolBrokerUrl = tcp://localhost:61616
     [                          main] MainSupport                    INFO  Apache Camel 2.12.0.redhat-610379 starting

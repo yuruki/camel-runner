@@ -36,7 +36,7 @@ public class CamelRunnerMain extends Main {
             @Override
             protected void doProcess(String arg, String parameter, LinkedList<String> remainingArgs) {
                 String[] p = parameter.split("=", 2);
-                log.info(String.format("Added property %s = %s", p[0], p[1]));
+                log.debug(String.format("Added property %s = %s", p[0], p[1]));
                 properties.put(p[0], p[1]);
             }
         });

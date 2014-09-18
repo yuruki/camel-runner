@@ -30,6 +30,7 @@ public class CamelRunnerMain extends Main {
 
     // Configurable fields
     private String camelContextId;
+    private String defaultRouteBuilderClasses;
 
     public CamelRunnerMain() {
         addOption(new ParameterOption("p", "property", "Adds a property value to Camel properties component", "propertyValue") {
@@ -90,10 +91,10 @@ public class CamelRunnerMain extends Main {
             log.warn("Couldn't set Camel context name", e);
         }
 
-        // Set up default routes through properties component
+        // Set up default routes
         if (null == getRouteBuilderClasses()) {
             try {
-                setRouteBuilderClasses(camelContext.resolvePropertyPlaceholders("{{defaultRouteBuilderClasses}}"));
+                setRouteBuilderClasses(defaultRouteBuilderClasses);
             } catch (Exception e) {
                 log.warn("Couldn't set default routes", e);
             }

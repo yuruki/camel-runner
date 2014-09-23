@@ -1,0 +1,48 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+group = 'com.github.yuruki'
+archivesBaseName = 'camel-runner'
+version = '1.2'
+description = "A standalone Camel runner for command line"
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+mainClassName = 'com.github.yuruki.camel.runner.CamelRunnerMain'
+
+repositories {
+	mavenCentral()
+
+	maven {
+		url "https://repo.fusesource.com/nexus/content/groups/ea"
+	}
+
+	maven {
+		url "https://repo.fusesource.com/nexus/content/groups/public"
+	}
+}
+
+dependencies {
+	compile (
+		'org.apache.camel:camel-core:2.12.0.redhat-610379',
+		'org.apache.camel:camel-jms:2.12.0.redhat-610379',
+		'org.apache.camel:camel-ftp:2.12.0.redhat-610379',
+		'org.apache.camel:camel-http4:2.12.0.redhat-610379',
+		'org.apache.activemq:activemq-camel:5.9.0.redhat-610379',
+		'org.apache.activemq:activemq-pool:5.9.0.redhat-610379',
+		'org.apache.activemq:activemq-client:5.9.0.redhat-610379',
+		'commons-lang:commons-lang:2.6',
+		'org.slf4j:slf4j-api:1.6.6',
+		'org.slf4j:slf4j-log4j12:1.6.6',
+		'log4j:log4j:1.2.16'
+	)
+}
+
+startScripts.doLast {
+        def windowsScriptFile = file getWindowsScript()
+        def unixScriptFile = file getUnixScript()
+        windowsScriptFile.text = windowsScriptFile.text.replaceFirst('CLASSPATH=.*', 'CLASSPATH=%APP_HOME%\\\\lib\\\\*')
+        unixScriptFile.text = unixScriptFile.text.replaceFirst('CLASSPATH=.*', 'CLASSPATH=\\$APP_HOME/lib/*')
+}
+

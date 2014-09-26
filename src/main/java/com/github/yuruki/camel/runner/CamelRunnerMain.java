@@ -5,6 +5,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.DefaultCamelContextNameStrategy;
+import org.apache.camel.impl.SimpleRegistry;
 import org.apache.camel.main.Main;
 import org.apache.camel.util.ReflectionHelper;
 import org.slf4j.Logger;
@@ -27,12 +28,16 @@ public class CamelRunnerMain extends Main {
     private String propertyPrefix = "";
     private File propertiesFile;
     private Properties properties = new Properties();
+    private SimpleRegistry registry = new SimpleRegistry();
 
     // Configurable fields
     private String camelContextId;
     private String defaultRouteBuilderClasses;
 
     public CamelRunnerMain() {
+        // Add self-reference to registry
+        registry.put("simpleRegistry", registry);
+
         addOption(new ParameterOption("p", "property", "Adds a property value to Camel properties component", "propertyValue") {
             @Override
             protected void doProcess(String arg, String parameter, LinkedList<String> remainingArgs) {
@@ -74,7 +79,7 @@ public class CamelRunnerMain extends Main {
 
     @Override
     protected CamelContext createContext() {
-        CamelContext camelContext = new DefaultCamelContext();
+        CamelContext camelContext = new DefaultCamelContext(registry);
 
         // Set up properties
         setupPropertiesComponent(camelContext);
@@ -127,7 +132,7 @@ public class CamelRunnerMain extends Main {
 
         // Overlay properties (classpath -> file -> command line)
         List<String> locations = new ArrayList<>();
-        locations.add("default.properties");
+        locations.add("defaultRoute.properties");
         if (null != propertiesFile && propertiesFile.exists()) {
             log.info("Adding properties file " + propertiesFile.getPath());
             locations.add("file:" + propertiesFile.getPath());

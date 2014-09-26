@@ -4,10 +4,10 @@ import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.commons.lang.Validate;
 
-public class SimpleRouteBuilder extends RouteBuilder {
+public class DefaultRouteBuilder extends RouteBuilder {
 
     // Configurable fields
-    private String camelRouteId = "simple-route";
+    private String camelRouteId = "default-route";
     private Integer maximumRedeliveries;
     private Long redeliveryDelay;
     private Double backOffMultiplier;

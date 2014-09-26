@@ -29,6 +29,8 @@ dependencies {
 		'org.apache.camel:camel-jms:2.12.0.redhat-610379',
 		'org.apache.camel:camel-ftp:2.12.0.redhat-610379',
 		'org.apache.camel:camel-http4:2.12.0.redhat-610379',
+        'org.apache.camel:camel-jetty:2.12.0.redhat-610379',
+        'org.apache.camel:camel-cxf:2.12.0.redhat-610379',
 		'org.apache.activemq:activemq-camel:5.9.0.redhat-610379',
 		'org.apache.activemq:activemq-pool:5.9.0.redhat-610379',
 		'org.apache.activemq:activemq-client:5.9.0.redhat-610379',

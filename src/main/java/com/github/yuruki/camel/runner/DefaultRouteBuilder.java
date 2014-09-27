@@ -4,6 +4,8 @@ import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.commons.lang.Validate;
 
+import java.util.Map;
+
 public class DefaultRouteBuilder extends RouteBuilder {
 
     // Configurable fields
@@ -17,11 +19,14 @@ public class DefaultRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
         checkProperties();
 
+        // Get a handle on Camel context registry in case you want to add beans here
+        Map<String, Object> registry = (Map) getContext().getRegistry().lookupByName(SelfReferencingRegistry.SELF);
+
         errorHandler(defaultErrorHandler()
-            .maximumRedeliveries(maximumRedeliveries)
-            .redeliveryDelay(redeliveryDelay)
-            .backOffMultiplier(backOffMultiplier)
-            .maximumRedeliveryDelay(maximumRedeliveryDelay));
+                .maximumRedeliveries(maximumRedeliveries)
+                .redeliveryDelay(redeliveryDelay)
+                .backOffMultiplier(backOffMultiplier)
+                .maximumRedeliveryDelay(maximumRedeliveryDelay));
 
         from("{{from}}")
             .routeId(camelRouteId)

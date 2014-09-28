@@ -4,8 +4,6 @@ import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.commons.lang.Validate;
 
-import java.util.Map;
-
 public class DefaultRouteBuilder extends RouteBuilder {
 
     // Configurable fields
@@ -20,7 +18,7 @@ public class DefaultRouteBuilder extends RouteBuilder {
         checkProperties();
 
         // Get a handle on Camel context registry in case you want to add beans here
-        Map<String, Object> registry = (Map) getContext().getRegistry().lookupByName(SelfReferencingRegistry.SELF);
+        SelfReferencingRegistry registry = (SelfReferencingRegistry) getContext().getRegistry().lookupByName(SelfReferencingRegistry.SELF);
 
         errorHandler(defaultErrorHandler()
                 .maximumRedeliveries(maximumRedeliveries)
@@ -46,10 +44,10 @@ public class DefaultRouteBuilder extends RouteBuilder {
     }
 
     public void checkProperties() {
+        Validate.notNull(camelRouteId, "camelRouteId property is not set");
         Validate.notNull(maximumRedeliveries, "maximumRedeliveries property is not set");
         Validate.notNull(redeliveryDelay, "redeliveryDelay property is not set");
         Validate.notNull(backOffMultiplier, "backOffMultiplier property is not set");
         Validate.notNull(maximumRedeliveryDelay, "maximumRedeliveryDelay property is not set");
-        Validate.notNull(camelRouteId, "camelRouteId property is not set");
     }
 }

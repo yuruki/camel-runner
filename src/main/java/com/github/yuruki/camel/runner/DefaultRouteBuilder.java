@@ -9,7 +9,7 @@ import java.util.Map;
 public class DefaultRouteBuilder extends RouteBuilder {
 
     // Configurable fields
-    private String camelRouteId = "default-route";
+    private String camelRouteId;
     private Integer maximumRedeliveries;
     private Long redeliveryDelay;
     private Double backOffMultiplier;

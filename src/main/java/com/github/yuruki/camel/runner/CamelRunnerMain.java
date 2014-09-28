@@ -67,8 +67,8 @@ public class CamelRunnerMain extends Main {
     public void showOptionsHeader() {
         System.out.println("A standalone Camel runner for command line");
         System.out.println();
-        System.out.println("java -jar camel-runner-<version>.jar [options]");
-        System.out.println("java -cp \"./*;lib/*\" com.github.yuruki.camel.runner.CamelRunnerMain [options]");
+        System.out.print("camel-runner[.bat] [options], or ");
+        System.out.println("java -cp \"lib/*\" com.github.yuruki.camel.runner.CamelRunnerMain [options]");
         System.out.println();
     }
 

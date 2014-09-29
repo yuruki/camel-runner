@@ -17,8 +17,8 @@ public class DefaultRouteBuilder extends RouteBuilder {
     public void configure() throws Exception {
         checkProperties();
 
-        // Get a handle on Camel context registry in case you want to add beans here
-        SelfReferencingRegistry registry = (SelfReferencingRegistry) getContext().getRegistry().lookupByName(SelfReferencingRegistry.SELF);
+        // Add a bean to Camel context registry
+        // CamelRunnerMain.addToRegistry(getContext().getRegistry(), "test", "bean");
 
         errorHandler(defaultErrorHandler()
                 .maximumRedeliveries(maximumRedeliveries)

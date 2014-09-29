@@ -3,9 +3,9 @@ package com.github.yuruki.camel.runner;
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.properties.PropertiesComponent;
-import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.camel.impl.DefaultCamelContextNameStrategy;
+import org.apache.camel.impl.*;
 import org.apache.camel.main.Main;
+import org.apache.camel.spi.Registry;
 import org.apache.camel.util.ReflectionHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +74,7 @@ public class CamelRunnerMain extends Main {
 
     @Override
     protected CamelContext createContext() {
-        CamelContext camelContext = new DefaultCamelContext(new SelfReferencingRegistry());
+        CamelContext camelContext = new DefaultCamelContext(registry);
 
         // Set up properties
         setupPropertiesComponent(camelContext);
@@ -186,6 +186,32 @@ public class CamelRunnerMain extends Main {
             }
         } else {
             return null;
+        }
+    }
+
+    public static <T extends Registry> void addToRegistry(final T registry, final String name, final Object bean) {
+        Registry reg = registry;
+
+        // Unwrap PropertyPlaceholderDelegateRegistry
+        if (registry instanceof PropertyPlaceholderDelegateRegistry) {
+            reg = ((PropertyPlaceholderDelegateRegistry) reg).getRegistry();
+        }
+
+        if (reg instanceof CompositeRegistry) {
+            // getRegistryList() not available in Camel 2.12
+            SimpleRegistry r = new SimpleRegistry();
+            r.put(name, bean);
+            ((CompositeRegistry) reg).addRegistry(r);
+        } else if (reg instanceof JndiRegistry) {
+            ((JndiRegistry) reg).bind(name, bean);
+        } else if (reg instanceof SimpleRegistry) {
+            ((SimpleRegistry) reg).put(name, bean);
+        } else {
+            throw new IllegalArgumentException("Couldn't add bean. Unknown registry type: " + reg.getClass());
+        }
+
+        if (registry.lookupByName(name) != bean) {
+            throw new IllegalArgumentException("Couldn't add bean. Bean not found from the registry.");
         }
     }
 }

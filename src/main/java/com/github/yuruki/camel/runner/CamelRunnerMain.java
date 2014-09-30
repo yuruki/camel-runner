@@ -25,8 +25,8 @@ public class CamelRunnerMain extends Main {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private String propertyPrefix = "";
-    private File propertiesFile;
     private Properties properties = new Properties();
+    private List<String> propertiesFiles = new ArrayList<>();
 
     // Configurable fields
     private String camelContextId;
@@ -44,8 +44,7 @@ public class CamelRunnerMain extends Main {
         addOption(new ParameterOption("pf", "propertiesFile", "Loads a properties file to Camel properties component", "propertiesFile") {
             @Override
             protected void doProcess(String arg, String parameter, LinkedList<String> remainingArgs) {
-                log.info("Setting properties file: " + parameter);
-                propertiesFile = new File(parameter);
+                propertiesFiles.add(parameter);
             }
         });
         addOption(new ParameterOption("pp", "propertyPrefix", "Sets a property prefix for Camel properties component", "propertyPrefix") {
@@ -127,13 +126,22 @@ public class CamelRunnerMain extends Main {
 
         // Overlay properties (classpath -> file -> command line)
         List<String> locations = new ArrayList<>();
-        locations.add("defaultRoute.properties");
-        if (null != propertiesFile && propertiesFile.exists()) {
-            log.info("Adding properties file " + propertiesFile.getPath());
-            locations.add("file:" + propertiesFile.getPath());
-        } else if (null != propertiesFile) {
-            log.warn("Properties file not found (" + propertiesFile.getPath() + ")");
+        if (propertiesFiles.isEmpty()) {
+            locations.add("defaultRoute.properties");
+        } else {
+            for (String pf : propertiesFiles) {
+                if (null != camelContext.getClassResolver().loadResourceAsURL(pf)) {
+                    log.info("Adding properties file " + pf + " from classpath");
+                    locations.add(pf);
+                } else if ((new File(pf)).exists()) {
+                    log.info("Adding properties file " + pf);
+                    locations.add("file:" + pf);
+                } else {
+                    log.warn("Properties file not found (" + pf + ")");
+                }
+            }
         }
+
         pc.setLocations(locations.toArray(new String[locations.size()]));
         pc.setOverrideProperties(properties);
     }

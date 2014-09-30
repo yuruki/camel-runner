@@ -1,10 +1,14 @@
-package com.github.yuruki.camel.runner;
+package com.github.yuruki.camel.runner.examples;
 
+import com.github.yuruki.camel.runner.CamelRunnerMain;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.commons.lang.Validate;
 
-public class DefaultRouteBuilder extends RouteBuilder {
+import java.util.HashMap;
+import java.util.Map;
+
+public class RestletRouteBuilder extends RouteBuilder {
 
     // Configurable fields
     private String camelRouteId;
@@ -16,6 +20,12 @@ public class DefaultRouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         checkProperties();
+
+        Map<String, String> users = new HashMap<>();
+        users.put("test", "pass");
+
+        // Add a bean to Camel context registry
+        CamelRunnerMain.addToRegistry(getContext().getRegistry(), "users", users);
 
         errorHandler(defaultErrorHandler()
                 .maximumRedeliveries(maximumRedeliveries)

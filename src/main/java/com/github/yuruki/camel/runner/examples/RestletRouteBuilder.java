@@ -16,13 +16,15 @@ public class RestletRouteBuilder extends RouteBuilder {
     private Long redeliveryDelay;
     private Double backOffMultiplier;
     private Long maximumRedeliveryDelay;
+    private String restUsername;
+    private String restPassword;
 
     @Override
     public void configure() throws Exception {
         checkProperties();
 
         Map<String, String> users = new HashMap<>();
-        users.put("test", "pass");
+        users.put(restUsername, restPassword);
 
         // Add a bean to Camel context registry
         CamelRunnerMain.addToRegistry(getContext().getRegistry(), "users", users);

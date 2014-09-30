@@ -100,3 +100,99 @@ Example 3, set up a REST service at http://localhost:8080/test (also the default
     2014-09-30 18:44:18,436 | l.impl.DefaultShutdownStrategy |  INFO | Graceful shutdown of 2 routes completed in 0 seconds
     2014-09-30 18:44:18,450 | camel.impl.DefaultCamelContext |  INFO | Apache Camel 2.12.0.redhat-610379 (CamelContext: camel-runner-2) uptime 10.090 seconds
     2014-09-30 18:44:18,450 | camel.impl.DefaultCamelContext |  INFO | Apache Camel 2.12.0.redhat-610379 (CamelContext: camel-runner-2) is shutdown in 0.024 seconds
+
+Example 4, set up a REST service that accepts data through POST and publishes it through GET:
+
+    $ build/install/camel-runner/bin/camel-runner -pf examples/cacheRoute.properties
+    2014-09-30 19:21:45,962 | .apache.camel.main.MainSupport |  INFO | Apache Camel 2.12.0.redhat-610379 starting
+    2014-09-30 19:21:46,224 | i.camel.runner.CamelRunnerMain |  INFO | Adding properties file examples/cacheRoute.properties from classpath
+    2014-09-30 19:21:46,293 | camel.impl.DefaultCamelContext |  INFO | Apache Camel 2.12.0.redhat-610379 (CamelContext: camel-runner-2) is starting
+    2014-09-30 19:21:46,296 | camel.impl.DefaultCamelContext |  INFO | MDC logging is enabled on CamelContext: camel-runner-2
+    2014-09-30 19:21:46,297 | ment.ManagedManagementStrategy |  INFO | JMX is enabled
+    2014-09-30 19:21:46,676 | converter.DefaultTypeConverter |  WARN | Overriding type converter from: StaticMethodTypeConverter: public static java.io.InputStream org.apache.camel.component.http4.HttpConverter.toInputStream(javax.servlet.http.HttpServletRequest,org.apache.camel.Exchange) throws java.io.IOException to: StaticMethodTypeConverter: public static java.io.InputStream org.apache.camel.component.http.HttpConverter.toInputStream(javax.servlet.http.HttpServletRequest,org.apache.camel.Exchange) throws java.io.IOException
+    2014-09-30 19:21:46,681 | converter.DefaultTypeConverter |  WARN | Overriding type converter from: StaticMethodTypeConverter: public static javax.servlet.http.HttpServletRequest org.apache.camel.component.http4.HttpConverter.toServletRequest(org.apache.camel.Message) to: StaticMethodTypeConverter: public static javax.servlet.http.HttpServletRequest org.apache.camel.component.http.HttpConverter.toServletRequest(org.apache.camel.Message)
+    2014-09-30 19:21:46,686 | converter.DefaultTypeConverter |  WARN | Overriding type converter from: StaticMethodTypeConverter: public static javax.servlet.http.HttpServletResponse org.apache.camel.component.http4.HttpConverter.toServletResponse(org.apache.camel.Message) to: StaticMethodTypeConverter: public static javax.servlet.http.HttpServletResponse org.apache.camel.component.http.HttpConverter.toServletResponse(org.apache.camel.Message)
+    2014-09-30 19:21:46,715 | converter.DefaultTypeConverter |  INFO | Loaded 213 type converters
+    2014-09-30 19:21:47,062 | camel.impl.DefaultCamelContext |  INFO | AllowUseOriginalMessage is enabled. If access to the original message is not needed, then its recommended to turn this option off as it may improve performance.
+    2014-09-30 19:21:47,067 | camel.impl.DefaultCamelContext |  INFO | StreamCaching is not in use. If using streams then its recommended to enable stream caching. See more details at http://camel.apache.org/stream-caching.html
+    2014-09-30 19:21:47,084 | che.DefaultCacheManagerFactory |  INFO | Creating CacheManager using Ehcache defaults
+    2014-09-30 19:21:47,115 | he.config.ConfigurationFactory |  WARN | No configuration found. Configuring ehcache from ehcache-failsafe.xml  found in the classpath: jar:file:/home/yuruki/Git/camel-runner/build/install/camel-runner/lib/ehcache-2.7.4.jar!/ehcache-failsafe.xml
+    2014-09-30 19:21:47,395 | ache.config.CacheConfiguration |  WARN | Cache 'camel-runner' is set to eternal but also has TTI/TTL set.  To avoid this warning, clean up the config removing conflicting values of eternal, TTI and TTL. Effective configuration for Cache 'camel-runner' will be eternal='true', timeToIdleSeconds='0', timeToLiveSeconds='0'.
+    Starting the internal [HTTP/1.1] server on port 8080
+    2014-09-30 19:21:47,744 | camel.impl.DefaultCamelContext |  INFO | Route: cache-route.cache.in started and consuming from: Endpoint[http://localhost:8080/data?restletMethods=POST]
+    2014-09-30 19:21:47,749 | camel.impl.DefaultCamelContext |  INFO | Route: cache-route.cache.out started and consuming from: Endpoint[cache://camel-runner?eternal=true&key=data]
+    2014-09-30 19:21:47,753 | camel.impl.DefaultCamelContext |  INFO | Route: cache-route started and consuming from: Endpoint[http://localhost:8080/data?restletMethods=GET]
+    2014-09-30 19:21:47,755 | camel.impl.DefaultCamelContext |  INFO | Route: cache-route.completion started and consuming from: Endpoint[direct://processCompletion]
+    2014-09-30 19:21:47,764 | camel.impl.DefaultCamelContext |  INFO | Total 4 routes, of which 4 is started.
+    2014-09-30 19:21:47,773 | camel.impl.DefaultCamelContext |  INFO | Apache Camel 2.12.0.redhat-610379 (CamelContext: camel-runner-2) started in 1.472 seconds
+    2014-09-30 19:22:00,721 |          cache-route.cache.out |  INFO | Exchange[ExchangePattern: InOnly, BodyType: String, Body: something]
+    2014-09-30      19:22:00        0:0:0:0:0:0:0:1 test    -       8080    POST    /data   -       200     9       9       38      http://localhost:8080   curl/7.38.0     -
+    2014-09-30 19:22:19,183 |                    cache-route |  INFO | Exchange[ExchangePattern: InOut, Headers: {breadcrumbId=ID-musta-49719-1412094106055-0-5, CamelCacheElementWasFound=true, CamelHttpMethod=GET, CamelHttpUri=http://localhost:8080/data, CamelRestletRequest=GET http://localhost:8080/data HTTP/1.1, CamelRestletResponse=HTTP/1.1 - OK (200) - The request has succeeded, org.restlet.http.headers=[[Authorization: Basic dGVzdDp0ZXN0], [User-Agent: curl/7.38.0], [Host: localhost:8080], [Accept: */*]], org.restlet.startTime=1412094139178}, BodyType: String, Body: something]
+    2014-09-30      19:22:19        0:0:0:0:0:0:0:1 test    -       8080    GET     /data   -       200     9       0       8       http://localhost:8080   curl/7.38.0     -
+    2014-09-30 19:22:19,202 |         cache-route.completion |  INFO | Success: restlet:http://localhost:8080/data?restletMethods=get&restletRealm=#users -> log:cache-route?showHeaders=true
+    2014-09-30 19:22:27,873 | .MainSupport$HangupInterceptor |  INFO | Received hang up - stopping the main instance.
+    2014-09-30 19:22:27,874 | .apache.camel.main.MainSupport |  INFO | Apache Camel 2.12.0.redhat-610379 stopping
+    2014-09-30 19:22:27,874 | camel.impl.DefaultCamelContext |  INFO | Apache Camel 2.12.0.redhat-610379 (CamelContext: camel-runner-2) is shutting down
+    2014-09-30 19:22:27,876 | l.impl.DefaultShutdownStrategy |  INFO | Starting to graceful shutdown 4 routes (timeout 300 seconds)
+    2014-09-30 19:22:27,882 | l.impl.DefaultShutdownStrategy |  INFO | Route: cache-route.completion shutdown complete, was consuming from: Endpoint[direct://processCompletion]
+    2014-09-30 19:22:27,883 | l.impl.DefaultShutdownStrategy |  INFO | Route: cache-route shutdown complete, was consuming from: Endpoint[http://localhost:8080/data?restletMethods=GET]
+    2014-09-30 19:22:27,884 | l.impl.DefaultShutdownStrategy |  INFO | Route: cache-route.cache.out shutdown complete, was consuming from: Endpoint[cache://camel-runner?eternal=true&key=data]
+    2014-09-30 19:22:27,885 | l.impl.DefaultShutdownStrategy |  INFO | Route: cache-route.cache.in shutdown complete, was consuming from: Endpoint[http://localhost:8080/data?restletMethods=POST]
+    2014-09-30 19:22:27,885 | l.impl.DefaultShutdownStrategy |  INFO | Graceful shutdown of 4 routes completed in 0 seconds
+    2014-09-30 19:22:27,926 | camel.impl.DefaultCamelContext |  INFO | Apache Camel 2.12.0.redhat-610379 (CamelContext: camel-runner-2) uptime 41.634 seconds
+    2014-09-30 19:22:27,926 | camel.impl.DefaultCamelContext |  INFO | Apache Camel 2.12.0.redhat-610379 (CamelContext: camel-runner-2) is shutdown in 0.052 seconds
+    
+    From client's perspective:
+    
+    $ curl -u test:test -d "something" http://localhost:8080/data
+    something
+    
+    $ curl -u test:test http://localhost:8080/data
+    something
+    $ curl -u test:test http://localhost:8080/data
+    something
+    
+Example 5, listen to an ActiveMQ topic and publish the data via REST service:
+
+    $ build/install/camel-runner/bin/camel-runner -pf examples/cacheRoute.properties -p "source=amq:topic:data?username=admin&password=admin" -p amqBrokerUrl=tcp://localhost:61616
+    2014-09-30 19:31:57,735 | .apache.camel.main.MainSupport |  INFO | Apache Camel 2.12.0.redhat-610379 starting
+    2014-09-30 19:31:57,999 | i.camel.runner.CamelRunnerMain |  INFO | Adding properties file examples/cacheRoute.properties from classpath
+    2014-09-30 19:31:58,068 | camel.impl.DefaultCamelContext |  INFO | Apache Camel 2.12.0.redhat-610379 (CamelContext: camel-runner-2) is starting
+    2014-09-30 19:31:58,070 | camel.impl.DefaultCamelContext |  INFO | MDC logging is enabled on CamelContext: camel-runner-2
+    2014-09-30 19:31:58,072 | ment.ManagedManagementStrategy |  INFO | JMX is enabled
+    2014-09-30 19:31:58,438 | converter.DefaultTypeConverter |  WARN | Overriding type converter from: StaticMethodTypeConverter: public static java.io.InputStream org.apache.camel.component.http.HttpConverter.toInputStream(javax.servlet.http.HttpServletRequest,org.apache.camel.Exchange) throws java.io.IOException to: StaticMethodTypeConverter: public static java.io.InputStream org.apache.camel.component.http4.HttpConverter.toInputStream(javax.servlet.http.HttpServletRequest,org.apache.camel.Exchange) throws java.io.IOException
+    2014-09-30 19:31:58,443 | converter.DefaultTypeConverter |  WARN | Overriding type converter from: StaticMethodTypeConverter: public static javax.servlet.http.HttpServletRequest org.apache.camel.component.http.HttpConverter.toServletRequest(org.apache.camel.Message) to: StaticMethodTypeConverter: public static javax.servlet.http.HttpServletRequest org.apache.camel.component.http4.HttpConverter.toServletRequest(org.apache.camel.Message)
+    2014-09-30 19:31:58,448 | converter.DefaultTypeConverter |  WARN | Overriding type converter from: StaticMethodTypeConverter: public static javax.servlet.http.HttpServletResponse org.apache.camel.component.http.HttpConverter.toServletResponse(org.apache.camel.Message) to: StaticMethodTypeConverter: public static javax.servlet.http.HttpServletResponse org.apache.camel.component.http4.HttpConverter.toServletResponse(org.apache.camel.Message)
+    2014-09-30 19:31:58,488 | converter.DefaultTypeConverter |  INFO | Loaded 213 type converters
+    2014-09-30 19:31:59,276 | camel.impl.DefaultCamelContext |  INFO | AllowUseOriginalMessage is enabled. If access to the original message is not needed, then its recommended to turn this option off as it may improve performance.
+    2014-09-30 19:31:59,277 | camel.impl.DefaultCamelContext |  INFO | StreamCaching is not in use. If using streams then its recommended to enable stream caching. See more details at http://camel.apache.org/stream-caching.html
+    2014-09-30 19:31:59,346 | che.DefaultCacheManagerFactory |  INFO | Creating CacheManager using Ehcache defaults
+    2014-09-30 19:31:59,371 | he.config.ConfigurationFactory |  WARN | No configuration found. Configuring ehcache from ehcache-failsafe.xml  found in the classpath: jar:file:/home/yuruki/Git/camel-runner/build/install/camel-runner/lib/ehcache-2.7.4.jar!/ehcache-failsafe.xml
+    2014-09-30 19:31:59,681 | ache.config.CacheConfiguration |  WARN | Cache 'camel-runner' is set to eternal but also has TTI/TTL set.  To avoid this warning, clean up the config removing conflicting values of eternal, TTI and TTL. Effective configuration for Cache 'camel-runner' will be eternal='true', timeToIdleSeconds='0', timeToLiveSeconds='0'.
+    2014-09-30 19:32:00,035 | camel.impl.DefaultCamelContext |  INFO | Route: cache-route.cache.in started and consuming from: Endpoint[amq://topic:data?password=xxxxxx&username=admin]
+    2014-09-30 19:32:00,045 | camel.impl.DefaultCamelContext |  INFO | Route: cache-route.cache.out started and consuming from: Endpoint[cache://camel-runner?eternal=true&key=data]
+    Starting the internal [HTTP/1.1] server on port 8080
+    2014-09-30 19:32:00,138 | camel.impl.DefaultCamelContext |  INFO | Route: cache-route started and consuming from: Endpoint[http://localhost:8080/data?restletMethods=GET]
+    2014-09-30 19:32:00,141 | camel.impl.DefaultCamelContext |  INFO | Route: cache-route.completion started and consuming from: Endpoint[direct://processCompletion]
+    2014-09-30 19:32:00,149 | camel.impl.DefaultCamelContext |  INFO | Total 4 routes, of which 4 is started.
+    2014-09-30 19:32:00,158 | camel.impl.DefaultCamelContext |  INFO | Apache Camel 2.12.0.redhat-610379 (CamelContext: camel-runner-2) started in 2.081 seconds
+    2014-09-30 19:33:05,426 |          cache-route.cache.out |  INFO | Exchange[ExchangePattern: InOnly, BodyType: String, Body: something]
+    2014-09-30 19:33:37,697 |                    cache-route |  INFO | Exchange[ExchangePattern: InOut, Headers: {breadcrumbId=ID-musta-45308-1412094717827-0-4, CamelCacheElementWasFound=true, CamelHttpMethod=GET, CamelHttpUri=http://localhost:8080/data, CamelRestletRequest=GET http://localhost:8080/data HTTP/1.1, CamelRestletResponse=HTTP/1.1 - OK (200) - The request has succeeded, org.restlet.http.headers=[[Authorization: Basic dGVzdDp0ZXN0], [User-Agent: curl/7.38.0], [Host: localhost:8080], [Accept: */*]], org.restlet.startTime=1412094817683}, BodyType: String, Body: something]
+    2014-09-30      19:33:37        0:0:0:0:0:0:0:1 test    -       8080    GET     /data   -       200     9       0       16      http://localhost:8080   curl/7.38.0     -
+    2014-09-30 19:33:37,716 |         cache-route.completion |  INFO | Success: restlet:http://localhost:8080/data?restletMethods=get&restletRealm=#users -> log:cache-route?showHeaders=true
+    2014-09-30 19:33:47,123 | .MainSupport$HangupInterceptor |  INFO | Received hang up - stopping the main instance.
+    2014-09-30 19:33:47,125 | .apache.camel.main.MainSupport |  INFO | Apache Camel 2.12.0.redhat-610379 stopping
+    2014-09-30 19:33:47,126 | camel.impl.DefaultCamelContext |  INFO | Apache Camel 2.12.0.redhat-610379 (CamelContext: camel-runner-2) is shutting down
+    2014-09-30 19:33:47,128 | l.impl.DefaultShutdownStrategy |  INFO | Starting to graceful shutdown 4 routes (timeout 300 seconds)
+    2014-09-30 19:33:47,134 | l.impl.DefaultShutdownStrategy |  INFO | Route: cache-route.completion shutdown complete, was consuming from: Endpoint[direct://processCompletion]
+    2014-09-30 19:33:47,135 | l.impl.DefaultShutdownStrategy |  INFO | Route: cache-route shutdown complete, was consuming from: Endpoint[http://localhost:8080/data?restletMethods=GET]
+    2014-09-30 19:33:47,135 | l.impl.DefaultShutdownStrategy |  INFO | Route: cache-route.cache.out shutdown complete, was consuming from: Endpoint[cache://camel-runner?eternal=true&key=data]
+    2014-09-30 19:33:47,441 | l.impl.DefaultShutdownStrategy |  INFO | Route: cache-route.cache.in shutdown complete, was consuming from: Endpoint[amq://topic:data?password=xxxxxx&username=admin]
+    2014-09-30 19:33:47,443 | l.impl.DefaultShutdownStrategy |  INFO | Graceful shutdown of 4 routes completed in 0 seconds
+    2014-09-30 19:33:47,489 | camel.impl.DefaultCamelContext |  INFO | Apache Camel 2.12.0.redhat-610379 (CamelContext: camel-runner-2) uptime 1 minute
+    2014-09-30 19:33:47,489 | camel.impl.DefaultCamelContext |  INFO | Apache Camel 2.12.0.redhat-610379 (CamelContext: camel-runner-2) is shutdown in 0.363 seconds
+    
+    From client's perspective:
+    
+    $ curl -u test:test http://localhost:8080/data
+    something

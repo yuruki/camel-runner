@@ -1,12 +1,13 @@
 package com.github.yuruki.camel.runner;
 
+import org.apache.activemq.camel.component.ActiveMQComponent;
 import org.apache.activemq.pool.PooledConnectionFactory;
 import org.apache.camel.Endpoint;
-import org.apache.camel.component.jms.JmsComponent;
 
 import java.util.Map;
 
-public class PooledAmqComponent extends JmsComponent {
+@SuppressWarnings("unused")
+public class PooledAmqComponent extends ActiveMQComponent {
 
     private PooledConnectionFactory pooledConnectionFactory = null;
 

@@ -20,10 +20,10 @@ public class PooledAmqComponent extends ActiveMQComponent {
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         try {
-            String amqBrokerUrl = getCamelContext().resolvePropertyPlaceholders("{{amqBrokerUrl}}");
-            setConnectionFactory(getPooledConnectionFactory(amqBrokerUrl));
+            String brokerUrl = getCamelContext().resolvePropertyPlaceholders("{{brokerUrl}}");
+            setConnectionFactory(getPooledConnectionFactory(brokerUrl));
         } catch (Exception e) {
-            throw new IllegalArgumentException("Component amq requires amqBrokerUrl property to be set.", e);
+            throw new IllegalArgumentException("Component amq requires brokerUrl property to be set.", e);
         }
         return super.createEndpoint(uri, remaining, parameters);
     }

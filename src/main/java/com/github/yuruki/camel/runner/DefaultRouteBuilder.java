@@ -7,10 +7,15 @@ import org.apache.commons.lang.Validate;
 public class DefaultRouteBuilder extends RouteBuilder {
 
     // Configurable fields
+    @SuppressWarnings("unused")
     private String camelRouteId;
+    @SuppressWarnings("unused")
     private Integer maximumRedeliveries;
+    @SuppressWarnings("unused")
     private Long redeliveryDelay;
+    @SuppressWarnings("unused")
     private Double backOffMultiplier;
+    @SuppressWarnings("unused")
     private Long maximumRedeliveryDelay;
 
     @Override
@@ -18,12 +23,14 @@ public class DefaultRouteBuilder extends RouteBuilder {
         checkProperties();
 
         errorHandler(defaultErrorHandler()
-                .maximumRedeliveries(maximumRedeliveries)
-                .redeliveryDelay(redeliveryDelay)
-                .backOffMultiplier(backOffMultiplier)
-                .maximumRedeliveryDelay(maximumRedeliveryDelay));
+            .retryAttemptedLogLevel(LoggingLevel.WARN)
+            .maximumRedeliveries(maximumRedeliveries)
+            .redeliveryDelay(redeliveryDelay)
+            .backOffMultiplier(backOffMultiplier)
+            .maximumRedeliveryDelay(maximumRedeliveryDelay));
 
         from("{{from}}")
+            .startupOrder(2)
             .routeId(camelRouteId)
             .onCompletion()
                 .to("direct:processCompletion")
@@ -31,6 +38,7 @@ public class DefaultRouteBuilder extends RouteBuilder {
             .to("{{to}}");
 
         from("direct:processCompletion")
+            .startupOrder(1)
             .routeId(camelRouteId + ".completion")
             .choice()
                 .when(simple("${exception} == null"))

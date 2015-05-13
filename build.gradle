@@ -3,7 +3,7 @@ apply plugin: 'application'
 
 group = 'com.github.yuruki'
 archivesBaseName = 'camel-runner'
-version = '1.2'
+version = '1.3'
 description = "A standalone Camel runner for command line"
 
 sourceCompatibility = 1.7
@@ -29,17 +29,19 @@ repositories {
 
 dependencies {
 	compile (
-		'org.apache.camel:camel-core:2.12.0.redhat-610379',
-		'org.apache.camel:camel-jms:2.12.0.redhat-610379',
-		'org.apache.camel:camel-ftp:2.12.0.redhat-610379',
-		'org.apache.camel:camel-http4:2.12.0.redhat-610379',
-        'org.apache.camel:camel-jetty:2.12.0.redhat-610379',
-        'org.apache.camel:camel-cxf:2.12.0.redhat-610379',
-        'org.apache.camel:camel-restlet:2.12.0.redhat-610379',
-        'org.apache.camel:camel-cache:2.12.0.redhat-610379',
-		'org.apache.activemq:activemq-camel:5.9.0.redhat-610379',
-		'org.apache.activemq:activemq-pool:5.9.0.redhat-610379',
-		'org.apache.activemq:activemq-client:5.9.0.redhat-610379',
+		'org.apache.camel:camel-core:2.15.1',
+		'org.apache.camel:camel-jms:2.15.1',
+		'org.apache.camel:camel-ftp:2.15.1',
+		'org.apache.camel:camel-http4:2.15.1',
+        'org.apache.camel:camel-jetty:2.15.1',
+        'org.apache.camel:camel-cxf:2.15.1',
+        'org.apache.camel:camel-restlet:2.15.1',
+        'org.apache.camel:camel-cache:2.15.1',
+		'org.apache.camel:camel-amqp:2.15.1',
+		'org.apache.qpid:qpid-amqp-1-0-client-jms:0.24',
+		'org.apache.activemq:activemq-camel:5.9.0.redhat-611412',
+		'org.apache.activemq:activemq-pool:5.9.0.redhat-611412',
+		'org.apache.activemq:activemq-client:5.9.0.redhat-611412',
 		'commons-lang:commons-lang:2.6',
 		'org.slf4j:slf4j-api:1.6.6',
 		'org.slf4j:slf4j-log4j12:1.6.6',
@@ -53,4 +55,3 @@ startScripts.doLast {
         windowsScriptFile.text = windowsScriptFile.text.replaceFirst('CLASSPATH=.*', 'CLASSPATH=%APP_HOME%\\\\lib\\\\*')
         unixScriptFile.text = unixScriptFile.text.replaceFirst('CLASSPATH=.*', 'CLASSPATH=\\$APP_HOME/lib/*')
 }
-

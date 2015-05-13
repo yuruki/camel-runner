@@ -2,6 +2,7 @@ package com.github.yuruki.camel.runner;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.amqp.AMQPComponent;
 import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.impl.*;
 import org.apache.camel.main.Main;
@@ -29,7 +30,9 @@ public class CamelRunnerMain extends Main {
     private List<String> propertiesFiles = new ArrayList<>();
 
     // Configurable fields
+    @SuppressWarnings("unused")
     private String camelContextId;
+    @SuppressWarnings("unused")
     private String defaultRouteBuilderClasses;
 
     public CamelRunnerMain() {
@@ -88,6 +91,15 @@ public class CamelRunnerMain extends Main {
             camelContext.setUseBreadcrumb(true);
         } catch (Exception e) {
             log.warn("Couldn't set Camel context name", e);
+        }
+
+        // Set up AMQP component
+        String brokerUrl = null;
+        try {
+            brokerUrl = camelContext.resolvePropertyPlaceholders("{{brokerUrl}}");
+            camelContext.addComponent("amqp", AMQPComponent.amqpComponent(brokerUrl, false));
+        } catch (Exception e) {
+            // This exception is ignored.
         }
 
         // Set up default routes

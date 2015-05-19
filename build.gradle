@@ -38,7 +38,7 @@ dependencies {
         'org.apache.camel:camel-restlet:2.15.1',
         'org.apache.camel:camel-cache:2.15.1',
 		'org.apache.camel:camel-amqp:2.15.1',
-		'org.apache.qpid:qpid-amqp-1-0-client-jms:0.24',
+		'org.apache.qpid:qpid-amqp-1-0-client-jms:0.28',
 		'org.apache.activemq:activemq-camel:5.9.0.redhat-611412',
 		'org.apache.activemq:activemq-pool:5.9.0.redhat-611412',
 		'org.apache.activemq:activemq-client:5.9.0.redhat-611412',

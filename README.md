@@ -42,7 +42,7 @@ Example 1, show usage:
 
 Example 2, listen to an ActiveMQ topic and log the messages:
 
-    $ build/install/camel-runner/bin/camel-runner -p "from=amq:topic:camel-runner.test.in?username=admin&password=admin" -p amqBrokerUrl=tcp://localhost:61616
+    $ build/install/camel-runner/bin/camel-runner -p "from=amq:topic:camel-runner.test.in?username=admin&password=admin" -p brokerUrl=tcp://localhost:61616
     2014-09-28 17:52:04,880 | .apache.camel.main.MainSupport |  INFO | Apache Camel 2.12.0.redhat-610379 starting
     2014-09-28 17:52:05,223 | camel.impl.DefaultCamelContext |  INFO | Apache Camel 2.12.0.redhat-610379 (CamelContext: camel-runner-2) is starting
     2014-09-28 17:52:05,226 | camel.impl.DefaultCamelContext |  INFO | MDC logging is enabled on CamelContext: camel-runner-2
@@ -154,7 +154,7 @@ Example 4, set up a REST service that accepts data through POST and publishes it
     
 Example 5, listen to an ActiveMQ topic and publish the data via REST service:
 
-    $ build/install/camel-runner/bin/camel-runner -pf examples/cacheRoute.properties -p "source=amq:topic:data?username=admin&password=admin" -p amqBrokerUrl=tcp://localhost:61616
+    $ build/install/camel-runner/bin/camel-runner -pf examples/cacheRoute.properties -p "source=amq:topic:data?username=admin&password=admin" -p brokerUrl=tcp://localhost:61616
     2014-09-30 19:31:57,735 | .apache.camel.main.MainSupport |  INFO | Apache Camel 2.12.0.redhat-610379 starting
     2014-09-30 19:31:57,999 | i.camel.runner.CamelRunnerMain |  INFO | Adding properties file examples/cacheRoute.properties from classpath
     2014-09-30 19:31:58,068 | camel.impl.DefaultCamelContext |  INFO | Apache Camel 2.12.0.redhat-610379 (CamelContext: camel-runner-2) is starting
